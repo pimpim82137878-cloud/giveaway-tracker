@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#fff1f7">
+  <title>Giveaway Tracker 💗</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <main class="app">
+    <header class="hero">
+      <div class="logo">🎀</div>
+      <div>
+        <p class="eyebrow">YOUR LITTLE GIVEAWAY HELPER</p>
+        <h1>Giveaway Tracker</h1>
+        <p class="sub">เก็บลิงก์ให้ครบ ไม่พลาด Giveaway ที่อยากได้ 💗</p>
+      </div>
+    </header>
+
+    <section id="setupNotice" class="notice hidden">
+      <strong>ยังไม่ได้เชื่อมต่อฐานข้อมูล</strong>
+      <p>หน้านี้เป็นไฟล์เริ่มต้น ต้องตั้งค่า Supabase ตาม README ก่อนข้อมูลจึงจะบันทึกออนไลน์ได้จริง</p>
+    </section>
+
+    <section id="loginPanel" class="panel">
+      <h2>ยินดีต้อนรับ ✨</h2>
+      <p class="muted">ใส่ชื่อเล่นเพื่อเริ่มใช้งาน ชื่อเล่นไม่ใช่รหัสผ่านและไม่สามารถใช้กู้บัญชีได้</p>
+      <label for="nickname">ชื่อเล่นของคุณ</label>
+      <input id="nickname" maxlength="24" placeholder="เช่น mochi / pinky" autocomplete="nickname">
+      <button id="startBtn" class="primary">เริ่มใช้งานของฉัน</button>
+      <p class="tiny">ระบบใช้บัญชีแบบไม่ต้องสมัคร (anonymous) เพื่อแยกรายการแต่ละคนในฐานข้อมูล ชื่อเล่นอาจซ้ำกันได้</p>
+    </section>
+
+    <section id="tracker" class="hidden">
+      <div class="welcome-row">
+        <div>
+          <p class="muted small">เช็กลิสต์ของ</p>
+          <h2 id="userHeading">คุณ 💗</h2>
+        </div>
+        <button id="logoutBtn" class="light small-btn">ออกจากพื้นที่นี้</button>
+      </div>
+
+      <section class="stats">
+        <div class="stat"><span>ทั้งหมด</span><strong id="totalCount">0</strong></div>
+        <div class="stat"><span>เก็บแล้ว</span><strong id="doneCount">0</strong></div>
+        <div class="stat"><span>ยังไม่ได้เก็บ</span><strong id="todoCount">0</strong></div>
+      </section>
+
+      <form id="addForm" class="panel add-form">
+        <h3>เพิ่ม Giveaway ใหม่ <span>✿</span></h3>
+        <label for="postTitle">ชื่อรายการ (ไม่ใส่ก็ได้)</label>
+        <input id="postTitle" maxlength="100" placeholder="เช่น แจกโฟโต้การ์ด / อัลบั้ม">
+        <label for="postUrl">ลิงก์ต้นโพสต์ X / Twitter</label>
+        <input id="postUrl" type="url" required placeholder="https://x.com/...">
+        <label for="postNote">โน้ต (ไม่ใส่ก็ได้)</label>
+        <input id="postNote" maxlength="250" placeholder="เช่น ปิดรับ 30 ต.ค.">
+        <button class="primary" type="submit">＋ เพิ่มลงเช็กลิสต์</button>
+      </form>
+
+      <div class="list-head">
+        <h3>รายการของฉัน</h3>
+        <select id="filter" aria-label="กรองรายการ">
+          <option value="all">ทั้งหมด</option>
+          <option value="todo">ยังไม่ได้เก็บ</option>
+          <option value="done">เก็บแล้ว</option>
+        </select>
+      </div>
+      <p id="statusMessage" class="muted small" role="status"></p>
+      <div id="items" class="items"></div>
+      <div id="emptyState" class="empty hidden">ยังไม่มีรายการเลย 🌷<br>เพิ่มลิงก์ต้นโพสต์แรกของคุณได้ด้านบน</div>
+    </section>
+    <footer>ทำด้วยความรักสำหรับนักเก็บ Giveaway 💕</footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

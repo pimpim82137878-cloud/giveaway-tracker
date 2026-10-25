@@ -16,6 +16,7 @@ function safeUrl(value) {
   try { const u = new URL(value); return ["https:", "http:"].includes(u.protocol) && (u.hostname === "x.com" || u.hostname === "www.x.com" || u.hostname === "twitter.com" || u.hostname === "www.twitter.com") ? u.href : null; }
   catch { return null; }
 }
+
 async function getXImageUrl(postUrl) {
   try {
     const match = postUrl.match(/\/status\/(\d+)/);
@@ -24,7 +25,7 @@ async function getXImageUrl(postUrl) {
     const postId = match[1];
 
     const response = await fetch(
-      https://api.vxtwitter.com/Twitter/status/${postId}
+      `https://api.vxtwitter.com/Twitter/status/${postId}`
     );
 
     if (!response.ok) return null;
@@ -115,7 +116,8 @@ function render() {
   rows.forEach(item => {
     const article = document.createElement("article");
     article.className = "item" + (item.is_done ? " done" : "");
-   if (item.image_url) {
+
+if (item.image_url) {
   const image = document.createElement("img");
 
   image.src = item.image_url;
@@ -159,6 +161,7 @@ $("addForm").addEventListener("submit", async (event) => {
   if (!db || !currentUser) return alert("กรุณาเข้าใช้งานก่อน");
   const postUrl = safeUrl($("postUrl").value.trim());
   if (!postUrl) return alert("กรุณาใส่ลิงก์โพสต์จาก x.com หรือ twitter.com");
+
 const title = $("postTitle").value.trim();
 const note = $("postNote").value.trim();
 
@@ -174,6 +177,7 @@ const { error } = await db.from("giveaway_items").insert({
   image_url: imageUrl,
   is_done: false
 });
+
   if (error) { alert("เพิ่มรายการไม่ได้: " + error.message); return; }
   $("addForm").reset(); await loadItems();
 });

@@ -74,7 +74,17 @@ searchEmpty: "ไม่พบรายการที่ตรงกับคำ
     defaultTitle: "Giveaway",
     prizeImage: "รูปของรางวัล",
     toggleLabel: "เปลี่ยนสถานะเก็บแล้ว",
-    deadlinePlaceholder: "เช่น ปิดรับ 30 ต.ค."
+    deadlinePlaceholder: "เช่น ปิดรับ 30 ต.ค.",
+    
+themeButton: "แต่งเว็บของฉัน",
+themeTitle: "🎨 แต่งเว็บของฉัน",
+themeDescription: "เลือกสีและรูปพื้นหลังในสไตล์ที่ชอบ 💗",
+themeBgLabel: "🌷 สีพื้นหลัง",
+themeAccentLabel: "🎀 สีปุ่มและธีม",
+themeCardLabel: "🩷 สีการ์ด",
+themeTextLabel: "✍️ สีตัวอักษร",
+themeImageLabel: "🖼️ อัปโหลดรูปพื้นหลัง",
+themeReset: "↺ คืนค่าธีมเริ่มต้น",
   },
 
   en: {
@@ -135,7 +145,17 @@ searchEmpty: "No matching items found 🔎",
     defaultTitle: "Giveaway",
     prizeImage: "Prize image",
     toggleLabel: "Toggle collected status",
-    deadlinePlaceholder: "e.g. Deadline: Oct 30"
+    deadlinePlaceholder: "e.g. Deadline: Oct 30",
+  
+themeButton: "Customize my website",
+themeTitle: "🎨 Customize my website",
+themeDescription: "Choose your favorite colors and background 💗",
+themeBgLabel: "🌷 Background color",
+themeAccentLabel: "🎀 Button and theme color",
+themeCardLabel: "🩷 Card color",
+themeTextLabel: "✍️ Text color",
+themeImageLabel: "🖼️ Upload background image",
+themeReset: "↺ Reset to default theme",
   },
 
   ko: {
@@ -196,7 +216,17 @@ searchEmpty: "검색 결과가 없습니다 🔎",
     defaultTitle: "Giveaway",
     prizeImage: "경품 이미지",
     toggleLabel: "완료 상태 변경",
-    deadlinePlaceholder: "예: 마감일 10월 30일"
+    deadlinePlaceholder: "예: 마감일 10월 30일",
+    
+themeButton: "내 웹사이트 꾸미기",
+themeTitle: "🎨 내 웹사이트 꾸미기",
+themeDescription: "좋아하는 색상과 배경을 선택하세요 💗",
+themeBgLabel: "🌷 배경색",
+themeAccentLabel: "🎀 버튼 및 테마 색상",
+themeCardLabel: "🩷 카드 색상",
+themeTextLabel: "✍️ 글자 색상",
+themeImageLabel: "🖼️ 배경 이미지 업로드",
+themeReset: "↺ 기본 테마로 초기화",
   },
 
   ja: {
@@ -257,7 +287,17 @@ searchEmpty: "一致する項目がありません 🔎",
     defaultTitle: "Giveaway",
     prizeImage: "景品画像",
     toggleLabel: "保存状態を変更",
-    deadlinePlaceholder: "例：締切 10月30日"
+    deadlinePlaceholder: "例：締切 10月30日",
+    
+themeButton: "ウェブサイトをカスタマイズ",
+themeTitle: "🎨 ウェブサイトをカスタマイズ",
+themeDescription: "好きな色と背景を選びましょう 💗",
+themeBgLabel: "🌷 背景色",
+themeAccentLabel: "🎀 ボタン・テーマの色",
+themeCardLabel: "🩷 カードの色",
+themeTextLabel: "✍️ 文字の色",
+themeImageLabel: "🖼️ 背景画像をアップロード",
+themeReset: "↺ デフォルトのテーマに戻す",
   },
 
   "zh-CN": {
@@ -318,7 +358,17 @@ searchEmpty: "没有找到匹配的项目 🔎",
     defaultTitle: "Giveaway",
     prizeImage: "奖品图片",
     toggleLabel: "切换收藏状态",
-    deadlinePlaceholder: "例如：截止日期 10 月 30 日"
+    deadlinePlaceholder: "例如：截止日期 10 月 30 日",
+  
+themeButton: "自定义我的网站",
+themeTitle: "🎨 自定义我的网站",
+themeDescription: "选择你喜欢的颜色和背景 💗",
+themeBgLabel: "🌷 背景颜色",
+themeAccentLabel: "🎀 按钮和主题颜色",
+themeCardLabel: "🩷 卡片颜色",
+themeTextLabel: "✍️ 文字颜色",
+themeImageLabel: "🖼️ 上传背景图片",
+themeReset: "↺ 恢复默认主题",
   },
 
   "zh-TW": {
@@ -379,7 +429,17 @@ searchEmpty: "找不到符合的項目 🔎",
     defaultTitle: "Giveaway",
     prizeImage: "獎品圖片",
     toggleLabel: "切換收藏狀態",
-    deadlinePlaceholder: "例如：截止日期 10 月 30 日"
+    deadlinePlaceholder: "例如：截止日期 10 月 30 日",
+  
+themeButton: "自訂我的網站",
+themeTitle: "🎨 自訂我的網站",
+themeDescription: "選擇你喜歡的顏色和背景 💗",
+themeBgLabel: "🌷 背景顏色",
+themeAccentLabel: "🎀 按鈕和主題顏色",
+themeCardLabel: "🩷 卡片顏色",
+themeTextLabel: "✍️ 文字顏色",
+themeImageLabel: "🖼️ 上傳背景圖片",
+themeReset: "↺ 恢復預設主題",
   },
 
   id: {
@@ -440,7 +500,17 @@ searchEmpty: "Tidak ada item yang cocok 🔎",
     defaultTitle: "Giveaway",
     prizeImage: "Gambar hadiah",
     toggleLabel: "Ubah status tersimpan",
-    deadlinePlaceholder: "mis. Batas waktu: 30 Okt"
+    deadlinePlaceholder: "mis. Batas waktu: 30 Okt",
+    
+themeButton: "Kustomisasi situs saya",
+themeTitle: "🎨 Kustomisasi situs saya",
+themeDescription: "Pilih warna dan gambar latar favoritmu 💗",
+themeBgLabel: "🌷 Warna latar belakang",
+themeAccentLabel: "🎀 Warna tombol dan tema",
+themeCardLabel: "🩷 Warna kartu",
+themeTextLabel: "✍️ Warna teks",
+themeImageLabel: "🖼️ Unggah gambar latar belakang",
+themeReset: "↺ Kembalikan tema default",
   },
 
   vi: {
@@ -501,7 +571,17 @@ searchEmpty: "Không tìm thấy mục phù hợp 🔎",
     defaultTitle: "Giveaway",
     prizeImage: "Hình ảnh phần quà",
     toggleLabel: "Thay đổi trạng thái đã lưu",
-    deadlinePlaceholder: "ví dụ: Hạn chót 30/10"
+    deadlinePlaceholder: "ví dụ: Hạn chót 30/10",
+    
+themeButton: "Tùy chỉnh trang web",
+themeTitle: "🎨 Tùy chỉnh trang web",
+themeDescription: "Chọn màu sắc và hình nền yêu thích 💗",
+themeBgLabel: "🌷 Màu nền",
+themeAccentLabel: "🎀 Màu nút và chủ đề",
+themeCardLabel: "🩷 Màu thẻ",
+themeTextLabel: "✍️ Màu chữ",
+themeImageLabel: "🖼️ Tải ảnh nền lên",
+themeReset: "↺ Khôi phục giao diện mặc định",
   }
 };
 
@@ -526,7 +606,7 @@ function getChecklistHeading(name) {
     "zh-CN": `${name}的 Giveaway 清单 💗`,
     "zh-TW": `${name}的 Giveaway 清單 💗`,
     id: `${name} — Daftar Giveaway 💗`,
-    vi: `${name} — Danh sách Giveaway 💗`
+    vi: `${name} — Danh sách Giveaway 💗`,
   };
 
   return headings[currentLanguage] || headings.th;
@@ -599,6 +679,14 @@ async function getXImageUrl(postUrl) {
 
 function applyLanguage() {
   document.documentElement.lang = currentLanguage;
+
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    element.textContent = tr(element.dataset.i18n);
+  });
+
+  document.querySelectorAll("[data-i18n-title]").forEach((element) => {
+    element.setAttribute("title", tr(element.dataset.i18nTitle));
+  });
 
   const setText = (selector, value) => {
     const element = document.querySelector(selector);

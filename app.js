@@ -1130,5 +1130,102 @@ async function deleteItem(id) {
 
 $("filter")?.addEventListener("change", render);
 $("searchInput")?.addEventListener("input", render);
+
+/* ===== Custom Theme Settings ===== */
+const themeDefaults = {
+  bg: "#fff7fb",
+  accent: "#e879a8",
+  card: "#ffffff"
+};
+
+const themeKeys = {
+  bg: "giveaway_theme_bg",
+  accent: "giveaway_theme_accent",
+  card: "giveaway_theme_card",
+  image: "giveaway_theme_image"
+};
+
+function applyTheme() {
+  const bg = localStorage.getItem(themeKeys.bg) || themeDefaults.bg;
+  const accent = localStorage.getItem(themeKeys.accent) || themeDefaults.accent;
+  const card = localStorage.getItem(themeKeys.card) || themeDefaults.card;
+  const image = localStorage.getItem(themeKeys.image);
+
+  const root = document.documentElement;
+  root.style.setProperty("--theme-bg", bg);
+  root.style.setProperty("--theme-accent", accent);
+  root.style.setProperty("--theme-card", card);
+
+  if (image) {
+    root.style.setProperty("--theme-bg-image", `url("${image}")`);
+  } else {
+    root.style.removeProperty("--theme-bg-image");
+  }
+
+  const bgPicker = $("themeBg");
+  const accentPicker = $("themeAccent");
+  const cardPicker = $("themeCard");
+
+  if (bgPicker) bgPicker.value = bg;
+  if (accentPicker) accentPicker.value = accent;
+  if (cardPicker) cardPicker.value = card;
+}
+
+function saveThemeColor(inputId, storageKey) {
+  const input = $(inputId);
+  if (!input) return;
+
+  input.addEventListener("input", () => {
+    localStorage.setItem(storageKey, input.value);
+    applyTheme();
+  });
+}
+
+saveThemeColor("themeBg", themeKeys.bg);
+saveThemeColor("themeAccent", themeKeys.accent);
+saveThemeColor("themeCard", themeKeys.card);
+
+$("themeImage")?.addEventListener("change", (event) => {
+  const file = event.target.files?.[0];
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+    alert("กรุณาเลือกไฟล์รูปภาพ");
+    event.target.value = "";
+    return;
+  }
+
+  // จำกัดขนาดเพื่อป้องกัน localStorage เต็ม
+  if (file.size > 1024 * 1024) {
+    alert("กรุณาเลือกรูปขนาดไม่เกิน 1 MB");
+    event.target.value = "";
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = () => {
+    try {
+      localStorage.setItem(themeKeys.image, reader.result);
+      applyTheme();
+    } catch (error) {
+      alert("บันทึกรูปไม่ได้ พื้นที่จัดเก็บในเบราว์เซอร์อาจเต็ม");
+    }
+  };
+
+  reader.readAsDataURL(file);
+});
+
+$("resetTheme")?.addEventListener("click", () => {
+  Object.values(themeKeys).forEach(key => localStorage.removeItem(key));
+
+  const imageInput = $("themeImage");
+  if (imageInput) imageInput.value = "";
+
+  applyTheme();
+});
+
+applyTheme();
+
 applyLanguage();
 init();

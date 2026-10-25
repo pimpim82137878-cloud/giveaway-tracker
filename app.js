@@ -59,12 +59,41 @@ async function getXImageUrl(postUrl) {
     return null;
   }
 }
+
 function showTracker(name) {
   nickname = name;
-  $("userHeading").textContent = name + " 💗";
+  $("userHeading").textContent = "เช็กลิสต์ของ " + name + " 💗";
   $("loginPanel").classList.add("hidden");
   $("tracker").classList.remove("hidden");
+
+  let editNameBtn = $("editNicknameBtn");
+
+  if (!editNameBtn) {
+    editNameBtn = document.createElement("button");
+    editNameBtn.id = "editNicknameBtn";
+    editNameBtn.className = "light small-btn";
+    editNameBtn.textContent = "แก้ไขชื่อ ✎";
+    editNameBtn.style.marginTop = "8px";
+
+    editNameBtn.addEventListener("click", () => {
+      const newName = prompt("แก้ไขชื่อเจ้าของเช็กลิสต์:", nickname);
+      if (newName === null) return;
+
+      const trimmedName = newName.trim();
+      if (trimmedName.length < 2) {
+        alert("กรุณาใส่ชื่ออย่างน้อย 2 ตัวอักษร");
+        return;
+      }
+
+      nickname = trimmedName;
+      localStorage.setItem("giveaway_nickname", trimmedName);
+      $("userHeading").textContent = "เช็กลิสต์ของ " + trimmedName + " 💗";
+    });
+
+    $("userHeading").insertAdjacentElement("afterend", editNameBtn);
+  }
 }
+
 async function init() {
   if (!db) return;
   try {

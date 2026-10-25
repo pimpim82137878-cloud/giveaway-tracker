@@ -2,3 +2,31 @@
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#fff0f7 0,#fff9fc 340px,#fff7fb 100%);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,sans-serif;min-height:100vh}
 .app{max-width:760px;margin:auto;padding:24px 16px 40px}.hero{display:flex;gap:14px;align-items:center;padding:12px 4px 22px}.logo{width:64px;height:64px;display:grid;place-items:center;background:#ffe0ed;border-radius:22px;font-size:32px;box-shadow:0 8px 22px #ed9fc022}.eyebrow{font-size:10px;letter-spacing:1.6px;color:var(--pink-dark);font-weight:800;margin:0 0 4px}.hero h1{font-size:clamp(25px,6vw,36px);margin:0;letter-spacing:-.8px}.sub{margin:7px 0 0;color:var(--muted);font-size:14px}.panel{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 8px 28px #9c56700a;margin-bottom:20px}.panel h2{margin:0 0 8px}.muted{color:var(--muted);line-height:1.55}.tiny{font-size:11px;line-height:1.55;color:#9b8994;margin:13px 0 0}.small{font-size:12px}.hidden{display:none!important}label{display:block;font-size:13px;font-weight:700;margin:15px 0 7px}input,select{font:inherit;color:var(--ink);width:100%;padding:13px 14px;border:1px solid #ecd4e0;border-radius:13px;background:#fff;outline:none}input:focus,select:focus{border-color:var(--pink);box-shadow:0 0 0 3px #f9dce9}button{font:inherit;border:0;cursor:pointer;border-radius:13px;padding:13px 16px;font-weight:750}.primary{width:100%;background:var(--pink);color:white;margin-top:16px;box-shadow:0 6px 14px #e879a833}.primary:active{transform:scale(.99)}.light{background:#fff;border:1px solid var(--line);color:var(--pink-dark)}.notice{background:#fff8e9;border:1px solid #f0dba8;border-radius:14px;padding:15px;margin-bottom:18px;font-size:13px}.notice p{margin:7px 0 0;line-height:1.5}.welcome-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 18px}.welcome-row h2{margin:2px 0;font-size:25px}.welcome-row p{margin:0}.small-btn{font-size:12px;padding:10px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}.stat{background:#fff;border:1px solid var(--line);border-radius:17px;padding:15px 12px}.stat span{display:block;font-size:12px;color:var(--muted)}.stat strong{display:block;font-size:27px;margin-top:6px;color:var(--pink-dark)}.add-form h3{margin:0;font-size:18px}.add-form h3 span{color:var(--pink)}.list-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:24px 0 4px}.list-head h3{margin:0}.list-head select{width:auto;max-width:150px;padding:10px;font-size:13px}.items{display:grid;gap:12px}.item{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;display:grid;gap:11px}.item-top{display:flex;gap:12px;align-items:flex-start}.check{width:23px;height:23px;accent-color:var(--pink);flex-shrink:0;margin-top:2px}.item-title{font-weight:800;line-height:1.4;overflow-wrap:anywhere}.item.done .item-title{text-decoration:line-through;color:#9b8994}.item-url{color:#b34c7f;font-size:12px;overflow-wrap:anywhere;text-decoration:none}.note{font-size:12px;color:var(--muted);white-space:pre-wrap}.item-actions{display:flex;gap:8px;flex-wrap:wrap}.item-actions button{font-size:12px;padding:9px 12px}.open-link{background:#fff0f6;color:#a43d70}.delete{background:#fff;border:1px solid #f0d7df;color:#a4586b}.empty{text-align:center;padding:30px 15px;background:#fff;border:1px dashed #e9bdd0;border-radius:18px;color:var(--muted);line-height:1.9}footer{text-align:center;color:#b19aa8;font-size:11px;padding:28px 0 4px}
 @media(min-width:600px){.app{padding-top:40px}.add-form{padding:25px}.stats{gap:14px}.stat{padding:18px}}
+.search-box {
+  margin: 14px 0;
+}
+
+.search-box label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+#searchInput {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid #f0c6da;
+  border-radius: 12px;
+  background: #fff;
+  color: #493642;
+  font: inherit;
+  outline: none;
+}
+
+#searchInput:focus {
+  border-color: #e58bb5;
+  box-shadow: 0 0 0 3px rgba(229, 139, 181, 0.15);
+}

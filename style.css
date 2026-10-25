@@ -30,3 +30,27 @@
   border-color: #e58bb5;
   box-shadow: 0 0 0 3px rgba(229, 139, 181, 0.15);
 }
+
+/* Custom theme overrides */
+body {
+  background-color: var(--theme-bg, #fff7fb);
+  background-image: var(
+    --theme-bg-image,
+    linear-gradient(180deg, #fff0f7 0, #fff9fc 340px, #fff7fb 100%)
+  );
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+.app .panel,
+.app .stat,
+.app .item,
+.app .empty {
+  background-color: var(--theme-card, #ffffff);
+}
+
+.app button.primary,
+.app #startBtn {
+  background-color: var(--theme-accent, #e879a8);
+  border-color: var(--theme-accent, #e879a8);
+}

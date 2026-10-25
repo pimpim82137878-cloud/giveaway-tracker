@@ -1227,5 +1227,15 @@ $("resetTheme")?.addEventListener("click", () => {
 
 applyTheme();
 
+const themeToggleBtn = $("toggleThemeBtn");
+const themePanel = $("themePanel");
+
+if (themeToggleBtn && themePanel) {
+  themeToggleBtn.addEventListener("click", () => {
+    const isHidden = themePanel.classList.toggle("hidden");
+    themeToggleBtn.setAttribute("aria-expanded", String(!isHidden));
+  });
+}
+
 applyLanguage();
 init();

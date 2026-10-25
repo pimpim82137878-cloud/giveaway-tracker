@@ -1173,8 +1173,9 @@ const textPicker = $("themeText");
   if (bgPicker) bgPicker.value = bg;
   if (accentPicker) accentPicker.value = accent;
   if (cardPicker) cardPicker.value = card;
-}
 if (textPicker) textPicker.value = text;
+}
+
 function saveThemeColor(inputId, storageKey) {
   const input = $(inputId);
   if (!input) return;
@@ -1241,6 +1242,11 @@ if (themeToggleBtn && themePanel) {
     themeToggleBtn.setAttribute("aria-expanded", String(!isHidden));
   });
 }
+
+saveThemeColor("themeBg", themeKeys.bg);
+saveThemeColor("themeAccent", themeKeys.accent);
+saveThemeColor("themeCard", themeKeys.card);
+saveThemeColor("themeText", themeKeys.text);
 
 applyLanguage();
 init();

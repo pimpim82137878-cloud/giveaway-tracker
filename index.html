@@ -34,6 +34,45 @@
 
     </header>
 
+<section class="panel theme-panel" id="themePanel">
+  <h2>🎨 แต่งเว็บของฉัน</h2>
+  <p class="muted small">เลือกสีและรูปพื้นหลังในสไตล์ที่ชอบ 💗</p>
+
+  <div class="theme-controls">
+    <label for="themeBg">🌷 สีพื้นหลัง</label>
+    <input
+      type="color"
+      id="themeBg"
+      value="#fff7fb"
+    >
+
+    <label for="themeAccent">🎀 สีปุ่มและธีม</label>
+    <input
+      type="color"
+      id="themeAccent"
+      value="#e879a8"
+    >
+
+    <label for="themeCard">🩷 สีการ์ด</label>
+    <input
+      type="color"
+      id="themeCard"
+      value="#ffffff"
+    >
+
+    <label for="themeImage">🖼️ อัปโหลดรูปพื้นหลัง</label>
+    <input
+      type="file"
+      id="themeImage"
+      accept="image/*"
+    >
+
+    <button id="resetTheme" type="button" class="light">
+      ↺ คืนค่าธีมเริ่มต้น
+    </button>
+  </div>
+</section>
+
     <section id="setupNotice" class="notice hidden">
       <strong>ยังไม่ได้เชื่อมต่อฐานข้อมูล</strong>
       <p>หน้านี้เป็นไฟล์เริ่มต้น ต้องตั้งค่า Supabase ตาม README ก่อนข้อมูลจึงจะบันทึกออนไลน์ได้จริง</p>

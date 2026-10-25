@@ -35,6 +35,7 @@
     </header>
 
 
+
 <button
   type="button"
   id="toggleThemeBtn"
@@ -42,49 +43,39 @@
   aria-expanded="false"
   aria-controls="themePanel"
   title="แต่งเว็บของฉัน"
+  data-i18n-title="themeButton"
 >
   🎨
 </button>
 
 <section class="panel theme-panel hidden" id="themePanel">
-  <h2>🎨 แต่งเว็บของฉัน</h2>
-  <p class="muted small">เลือกสีและรูปพื้นหลังในสไตล์ที่ชอบ 💗</p>
+  <h2 data-i18n="themeTitle">🎨 แต่งเว็บของฉัน</h2>
+  <p class="muted small" data-i18n="themeDescription">
+    เลือกสีและรูปพื้นหลังในสไตล์ที่ชอบ 💗
+  </p>
 
   <div class="theme-controls">
-    <label for="themeBg">🌷 สีพื้นหลัง</label>
-    <input
-      type="color"
-      id="themeBg"
-      value="#fff7fb"
-    >
+    <label for="themeBg" data-i18n="themeBgLabel">🌷 สีพื้นหลัง</label>
+    <input type="color" id="themeBg" value="#fff7fb">
 
-    <label for="themeAccent">🎀 สีปุ่มและธีม</label>
-    <input
-      type="color"
-      id="themeAccent"
-      value="#e879a8"
-    >
+    <label for="themeAccent" data-i18n="themeAccentLabel">🎀 สีปุ่มและธีม</label>
+    <input type="color" id="themeAccent" value="#e879a8">
 
-    <label for="themeCard">🩷 สีการ์ด</label>
-    <input
-      type="color"
-      id="themeCard"
-      value="#ffffff"
-    >
-<label for="themeText">✍️ สีตัวอักษร</label>
-<input type="color" id="themeText" value="#4a3540">
-    <label for="themeImage">🖼️ อัปโหลดรูปพื้นหลัง</label>
-    <input
-      type="file"
-      id="themeImage"
-      accept="image/*"
-    >
+    <label for="themeCard" data-i18n="themeCardLabel">🩷 สีการ์ด</label>
+    <input type="color" id="themeCard" value="#ffffff">
 
-    <button id="resetTheme" type="button" class="light">
+    <label for="themeText" data-i18n="themeTextLabel">✍️ สีตัวอักษร</label>
+    <input type="color" id="themeText" value="#4a3540">
+
+    <label for="themeImage" data-i18n="themeImageLabel">🖼️ อัปโหลดรูปพื้นหลัง</label>
+    <input type="file" id="themeImage" accept="image/*">
+
+    <button id="resetTheme" type="button" class="light" data-i18n="themeReset">
       ↺ คืนค่าธีมเริ่มต้น
     </button>
   </div>
 </section>
+
 
     <section id="setupNotice" class="notice hidden">
       <strong>ยังไม่ได้เชื่อมต่อฐานข้อมูล</strong>

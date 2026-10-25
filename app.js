@@ -659,6 +659,7 @@ if (searchInput) {
   }
 }
 
+
 const languageSelect = $("languageSelect");
 
 if (languageSelect) {
@@ -671,8 +672,10 @@ if (languageSelect) {
 
     localStorage.setItem("giveaway_language", currentLanguage);
     applyLanguage();
+    render();
   });
 }
+
 
 if (configured && window.supabase) {
   db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);

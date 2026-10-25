@@ -16,6 +16,48 @@ function safeUrl(value) {
   try { const u = new URL(value); return ["https:", "http:"].includes(u.protocol) && (u.hostname === "x.com" || u.hostname === "www.x.com" || u.hostname === "twitter.com" || u.hostname === "www.twitter.com") ? u.href : null; }
   catch { return null; }
 }
+async function getXImageUrl(postUrl) {
+  try {
+    const match = postUrl.match(/\/status\/(\d+)/);
+    if (!match) return null;
+
+    const postId = match[1];
+
+    const response = await fetch(
+      https://api.vxtwitter.com/Twitter/status/${postId}
+    );
+
+    if (!response.ok) return null;
+
+    const data = await response.json();
+
+    const media = Array.isArray(data.media_extended)
+      ? data.media_extended
+      : [];
+
+    const image = media.find(item =>
+      item.type === "image" &&
+      typeof item.url === "string" &&
+      item.url.startsWith("https://")
+    );
+
+    if (image) return image.url;
+
+    if (Array.isArray(data.mediaURLs)) {
+      const fallback = data.mediaURLs.find(url =>
+        typeof url === "string" &&
+        url.startsWith("https://pbs.twimg.com/media/")
+      );
+
+      if (fallback) return fallback;
+    }
+
+    return null;
+  } catch (error) {
+    console.error("ดึงรูปไม่สำเร็จ:", error);
+    return null;
+  }
+}
 function showTracker(name) {
   nickname = name;
   $("userHeading").textContent = name + " 💗";
@@ -73,6 +115,26 @@ function render() {
   rows.forEach(item => {
     const article = document.createElement("article");
     article.className = "item" + (item.is_done ? " done" : "");
+   if (item.image_url) {
+  const image = document.createElement("img");
+
+  image.src = item.image_url;
+  image.alt = item.title || "รูปของรางวัล";
+  image.loading = "lazy";
+
+  image.style.display = "block";
+  image.style.width = "100%";
+  image.style.maxHeight = "260px";
+  image.style.objectFit = "contain";
+  image.style.borderRadius = "12px";
+  image.style.marginBottom = "12px";
+
+  image.addEventListener("error", () => {
+    image.remove();
+  });
+
+  article.append(image);
+}
     const top = document.createElement("div"); top.className = "item-top";
     const checkbox = document.createElement("input"); checkbox.type = "checkbox"; checkbox.className = "check"; checkbox.checked = item.is_done; checkbox.setAttribute("aria-label", "เปลี่ยนสถานะเก็บแล้ว");
     checkbox.addEventListener("change", () => toggleItem(item.id, checkbox.checked));
@@ -97,8 +159,21 @@ $("addForm").addEventListener("submit", async (event) => {
   if (!db || !currentUser) return alert("กรุณาเข้าใช้งานก่อน");
   const postUrl = safeUrl($("postUrl").value.trim());
   if (!postUrl) return alert("กรุณาใส่ลิงก์โพสต์จาก x.com หรือ twitter.com");
-  const title = $("postTitle").value.trim(), note = $("postNote").value.trim();
-  const { error } = await db.from("giveaway_items").insert({owner_id:currentUser.id, title:title || "Giveaway", post_url:postUrl, note, is_done:false});
+const title = $("postTitle").value.trim();
+const note = $("postNote").value.trim();
+
+msg("กำลังค้นหารูปของรางวัล…");
+
+const imageUrl = await getXImageUrl(postUrl);
+
+const { error } = await db.from("giveaway_items").insert({
+  owner_id: currentUser.id,
+  title: title || "Giveaway",
+  post_url: postUrl,
+  note,
+  image_url: imageUrl,
+  is_done: false
+});
   if (error) { alert("เพิ่มรายการไม่ได้: " + error.message); return; }
   $("addForm").reset(); await loadItems();
 });

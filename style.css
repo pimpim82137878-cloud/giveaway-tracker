@@ -78,3 +78,22 @@ body {
 .theme-panel {
   margin-bottom: 20px;
 }
+
+/* สีตัวอักษรจากเมนูแต่งธีม */
+body .app,
+body .app h1,
+body .app h2,
+body .app h3,
+body .app p,
+body .app label,
+body .app span,
+body .app strong,
+body .app .item-title,
+body .app .item-url,
+body .app .note,
+body .app .muted,
+body .app .eyebrow,
+body .app footer,
+body .app .empty {
+  color: var(--theme-text, #4a3540);
+}

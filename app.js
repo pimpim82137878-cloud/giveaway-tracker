@@ -40,6 +40,9 @@ const translations = {
     all: "ทั้งหมด",
     filterTodo: "ยังไม่ได้เก็บ",
     filterDone: "เก็บแล้ว",
+    searchLabel: "ค้นหาชื่อรายการ",
+searchPlaceholder: "พิมพ์ชื่อ Giveaway ที่ต้องการค้นหา...",
+searchEmpty: "ไม่พบรายการที่ตรงกับคำค้นหา 🔎",
     empty: "ยังไม่มีรายการเลย 🌷",
     emptyHint: "เพิ่มลิงก์ต้นโพสต์แรกของคุณได้ด้านบน",
     editName: "แก้ไขชื่อ ✎",
@@ -98,6 +101,9 @@ const translations = {
     all: "All",
     filterTodo: "Not collected",
     filterDone: "Collected",
+    searchLabel: "Search item names",
+searchPlaceholder: "Search giveaway names...",
+searchEmpty: "No matching items found 🔎",
     empty: "No items yet 🌷",
     emptyHint: "Add your first post link above",
     editName: "Edit name ✎",
@@ -156,6 +162,9 @@ const translations = {
     all: "전체",
     filterTodo: "미완료",
     filterDone: "완료",
+    searchLabel: "항목 이름 검색",
+searchPlaceholder: "Giveaway 이름 검색...",
+searchEmpty: "검색 결과가 없습니다 🔎",
     empty: "아직 항목이 없어요 🌷",
     emptyHint: "위에서 첫 게시물 링크를 추가하세요",
     editName: "이름 수정 ✎",
@@ -214,6 +223,9 @@ const translations = {
     all: "すべて",
     filterTodo: "未保存",
     filterDone: "保存済み",
+    searchLabel: "項目名を検索",
+searchPlaceholder: "Giveaway 名を検索...",
+searchEmpty: "一致する項目がありません 🔎",
     empty: "まだ項目がありません 🌷",
     emptyHint: "上から最初の投稿リンクを追加してください",
     editName: "名前を編集 ✎",
@@ -272,6 +284,9 @@ const translations = {
     all: "全部",
     filterTodo: "未收藏",
     filterDone: "已收藏",
+    searchLabel: "搜索项目名称",
+searchPlaceholder: "搜索 Giveaway 名称...",
+searchEmpty: "没有找到匹配的项目 🔎",
     empty: "还没有项目 🌷",
     emptyHint: "在上方添加你的第一个帖子链接",
     editName: "编辑名称 ✎",
@@ -330,6 +345,9 @@ const translations = {
     all: "全部",
     filterTodo: "未收藏",
     filterDone: "已收藏",
+    searchLabel: "搜尋項目名稱",
+searchPlaceholder: "搜尋 Giveaway 名稱...",
+searchEmpty: "找不到符合的項目 🔎",
     empty: "目前沒有項目 🌷",
     emptyHint: "在上方新增第一個貼文連結",
     editName: "編輯名稱 ✎",
@@ -388,6 +406,9 @@ const translations = {
     all: "Semua",
     filterTodo: "Belum tersimpan",
     filterDone: "Tersimpan",
+    searchLabel: "Cari nama item",
+searchPlaceholder: "Cari nama giveaway...",
+searchEmpty: "Tidak ada item yang cocok 🔎",
     empty: "Belum ada item 🌷",
     emptyHint: "Tambahkan tautan posting pertama di atas",
     editName: "Ubah nama ✎",
@@ -446,6 +467,9 @@ const translations = {
     all: "Tất cả",
     filterTodo: "Chưa lưu",
     filterDone: "Đã lưu",
+    searchLabel: "Tìm tên mục",
+searchPlaceholder: "Tìm tên giveaway...",
+searchEmpty: "Không tìm thấy mục phù hợp 🔎",
     empty: "Chưa có mục nào 🌷",
     emptyHint: "Thêm liên kết bài đăng đầu tiên ở trên",
     editName: "Sửa tên ✎",
@@ -595,6 +619,12 @@ function applyLanguage() {
   setText('label[for="postNote"]', tr("note"));
   setText('#addForm button[type="submit"]', tr("add"));
   setText(".list-head h3", tr("myItems"));
+  setText("#searchLabel", tr("searchLabel"));
+
+const searchInput = $("searchInput");
+if (searchInput) {
+  searchInput.placeholder = tr("searchPlaceholder");
+}
   setText("#emptyState", tr("empty") + "\n" + tr("emptyHint"));
   setText("footer", tr("saved"));
 
@@ -816,15 +846,37 @@ function render() {
     $("todoCount").textContent = allItems.length - doneCount;
   }
 
-  const filter = filterElement.value;
+ const filter = filterElement.value;
+const searchTerm = ($("searchInput")?.value || "")
+  .trim()
+  .toLocaleLowerCase();
 
-  const rows = allItems.filter(item =>
+const rows = allItems.filter(item => {
+  const matchesFilter =
     filter === "all" ||
-    (filter === "done" ? item.is_done : !item.is_done)
-  );
+    (filter === "done" ? item.is_done : !item.is_done);
 
-  itemsElement.innerHTML = "";
-  emptyState.classList.toggle("hidden", rows.length !== 0);
+  const title = (item.title || tr("untitled"))
+    .toLocaleLowerCase();
+
+  const matchesSearch = title.includes(searchTerm);
+
+  return matchesFilter && matchesSearch;
+});
+
+itemsElement.innerHTML = "";
+
+emptyState.classList.toggle("hidden", rows.length !== 0);
+
+if (rows.length === 0) {
+  if (allItems.length === 0) {
+    emptyState.textContent = tr("empty") + "\n" + tr("emptyHint");
+  } else {
+    emptyState.textContent = searchTerm
+      ? tr("searchEmpty")
+      : tr("empty");
+  }
+}
 
   rows.forEach(item => {
     const article = document.createElement("article");
@@ -1074,6 +1126,6 @@ async function deleteItem(id) {
 }
 
 $("filter")?.addEventListener("change", render);
-
+$("searchInput")?.addEventListener("input", render);
 applyLanguage();
 init();

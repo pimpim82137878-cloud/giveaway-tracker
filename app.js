@@ -104,52 +104,172 @@ async function loadItems() {
   if (error) { msg("โหลดรายการไม่ได้: " + error.message); return; }
   allItems = data || []; render(); msg("");
 }
+
 function render() {
   const done = allItems.filter(x => x.is_done).length;
   $("totalCount").textContent = allItems.length;
   $("doneCount").textContent = done;
   $("todoCount").textContent = allItems.length - done;
+
   const filter = $("filter").value;
-  const rows = allItems.filter(x => filter === "all" || (filter === "done" ? x.is_done : !x.is_done));
+  const rows = allItems.filter(x =>
+    filter === "all" ||
+    (filter === "done" ? x.is_done : !x.is_done)
+  );
+
   $("items").innerHTML = "";
   $("emptyState").classList.toggle("hidden", rows.length !== 0);
+
   rows.forEach(item => {
     const article = document.createElement("article");
     article.className = "item" + (item.is_done ? " done" : "");
+    article.style.padding = "14px";
 
-if (item.image_url) {
-  const image = document.createElement("img");
+    // แถวหลัก: รูปซ้าย ข้อมูลขวา
+    const layout = document.createElement("div");
+    layout.style.display = "flex";
+    layout.style.alignItems = "flex-start";
+    layout.style.gap = "12px";
+    layout.style.width = "100%";
 
-  image.src = item.image_url;
-  image.alt = item.title || "รูปของรางวัล";
-  image.loading = "lazy";
+    // รูปพรีวิว
+    if (item.image_url) {
+      const imageBox = document.createElement("div");
+      imageBox.style.flex = "0 0 105px";
+      imageBox.style.width = "105px";
+      imageBox.style.maxWidth = "35%";
 
-  image.style.display = "block";
-  image.style.width = "100%";
-  image.style.maxHeight = "260px";
-  image.style.objectFit = "contain";
-  image.style.borderRadius = "12px";
-  image.style.marginBottom = "12px";
+      const image = document.createElement("img");
+      image.src = item.image_url;
+      image.alt = item.title || "รูปของรางวัล";
+      image.loading = "lazy";
+      image.style.display = "block";
+      image.style.width = "100%";
+      image.style.height = "125px";
+      image.style.objectFit = "contain";
+      image.style.borderRadius = "10px";
 
-  image.addEventListener("error", () => {
-    image.remove();
+      image.addEventListener("error", () => imageBox.remove());
+
+      imageBox.append(image);
+      layout.append(imageBox);
+    }
+
+    // ข้อมูลฝั่งขวา
+    const details = document.createElement("div");
+    details.style.flex = "1";
+    details.style.minWidth = "0";
+
+    const top = document.createElement("div");
+    top.style.display = "flex";
+    top.style.alignItems = "flex-start";
+    top.style.gap = "8px";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.className = "check";
+    checkbox.checked = item.is_done;
+    checkbox.setAttribute("aria-label", "เปลี่ยนสถานะเก็บแล้ว");
+    checkbox.addEventListener("change", () =>
+      toggleItem(item.id, checkbox.checked)
+    );
+
+    const textBox = document.createElement("div");
+    textBox.style.flex = "1";
+    textBox.style.minWidth = "0";
+
+    const title = document.createElement("div");
+    title.className = "item-title";
+    title.textContent = item.title || "Giveaway ไม่มีชื่อ";
+    title.style.overflowWrap = "anywhere";
+
+    const link = document.createElement("a");
+    link.className = "item-url";
+    link.href = item.post_url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = item.post_url;
+    link.style.overflowWrap = "anywhere";
+
+    textBox.append(title, link);
+    top.append(checkbox, textBox);
+    details.append(top);
+    layout.append(details);
+    article.append(layout);
+
+    // หมายเหตุ
+    if (item.note) {
+      const note = document.createElement("div");
+      note.className = "note";
+      note.textContent = "✎ " + item.note;
+      note.style.marginTop = "10px";
+      article.append(note);
+    }
+
+    // ปุ่มจัดการรายการ
+    const actions = document.createElement("div");
+    actions.className = "item-actions";
+    actions.style.display = "flex";
+    actions.style.flexWrap = "wrap";
+    actions.style.gap = "8px";
+    actions.style.marginTop = "12px";
+
+    const open = document.createElement("button");
+    open.className = "open-link";
+    open.textContent = "เปิดต้นโพสต์ ↗";
+    open.addEventListener("click", () =>
+      window.open(item.post_url, "_blank", "noopener")
+    );
+
+    const edit = document.createElement("button");
+    edit.className = "open-link";
+    edit.textContent = "แก้ไขชื่อ ✎";
+    edit.addEventListener("click", () => editItem(item.id));
+
+    const del = document.createElement("button");
+    del.className = "delete";
+    del.textContent = "ลบรายการ";
+    del.addEventListener("click", () => deleteItem(item.id));
+
+    actions.append(open, edit, del);
+    article.append(actions);
+    $("items").append(article);
   });
-
-  article.append(image);
 }
-    const top = document.createElement("div"); top.className = "item-top";
-    const checkbox = document.createElement("input"); checkbox.type = "checkbox"; checkbox.className = "check"; checkbox.checked = item.is_done; checkbox.setAttribute("aria-label", "เปลี่ยนสถานะเก็บแล้ว");
-    checkbox.addEventListener("change", () => toggleItem(item.id, checkbox.checked));
-    const details = document.createElement("div"); details.style.minWidth = "0"; details.style.flex = "1";
-    const title = document.createElement("div"); title.className = "item-title"; title.textContent = item.title || "Giveaway ไม่มีชื่อ";
-    const link = document.createElement("a"); link.className = "item-url"; link.href = item.post_url; link.target = "_blank"; link.rel = "noopener noreferrer"; link.textContent = item.post_url;
-    details.append(title, link); top.append(checkbox, details); article.append(top);
-    if (item.note) { const note = document.createElement("div"); note.className = "note"; note.textContent = "✎ " + item.note; article.append(note); }
-    const actions = document.createElement("div"); actions.className = "item-actions";
-    const open = document.createElement("button"); open.className = "open-link"; open.textContent = "เปิดต้นโพสต์ ↗"; open.addEventListener("click", () => window.open(item.post_url, "_blank", "noopener"));
-    const del = document.createElement("button"); del.className = "delete"; del.textContent = "ลบรายการ"; del.addEventListener("click", () => deleteItem(item.id));
-    actions.append(open, del); article.append(actions); $("items").append(article);
-  });
+
+async function editItem(id) {
+  const item = allItems.find(x => x.id === id);
+  if (!item) return;
+
+  const newTitle = prompt(
+    "แก้ไขชื่อของรางวัล:",
+    item.title || ""
+  );
+
+  // กดยกเลิก
+  if (newTitle === null) return;
+
+  const title = newTitle.trim();
+  if (!title) {
+    alert("กรุณาใส่ชื่อของรางวัล");
+    return;
+  }
+
+  if (title === item.title) return;
+
+  const { error } = await db
+    .from("giveaway_items")
+    .update({ title })
+    .eq("id", id)
+    .eq("owner_id", currentUser.id);
+
+  if (error) {
+    alert("แก้ไขชื่อไม่สำเร็จ: " + error.message);
+    return;
+  }
+
+  item.title = title;
+  render();
 }
 async function toggleItem(id, value) {
   const { error } = await db.from("giveaway_items").update({is_done:value}).eq("id", id);

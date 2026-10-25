@@ -54,3 +54,27 @@ body {
   background-color: var(--theme-accent, #e879a8);
   border-color: var(--theme-accent, #e879a8);
 }
+
+/* ปุ่มแต่งธีมขนาดเล็ก */
+.theme-toggle {
+  display: block;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  margin: 0 0 14px auto;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--theme-card, #fff);
+  color: var(--ink);
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px #9c567018;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+}
+
+.theme-panel {
+  margin-bottom: 20px;
+}

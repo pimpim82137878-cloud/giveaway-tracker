@@ -1135,13 +1135,15 @@ $("searchInput")?.addEventListener("input", render);
 const themeDefaults = {
   bg: "#fff7fb",
   accent: "#e879a8",
-  card: "#ffffff"
+  card: "#ffffff",
+  text: "#4a3540"
 };
 
 const themeKeys = {
   bg: "giveaway_theme_bg",
   accent: "giveaway_theme_accent",
   card: "giveaway_theme_card",
+  text: "giveaway_theme_text",
   image: "giveaway_theme_image"
 };
 
@@ -1149,13 +1151,14 @@ function applyTheme() {
   const bg = localStorage.getItem(themeKeys.bg) || themeDefaults.bg;
   const accent = localStorage.getItem(themeKeys.accent) || themeDefaults.accent;
   const card = localStorage.getItem(themeKeys.card) || themeDefaults.card;
-  const image = localStorage.getItem(themeKeys.image);
+const text = localStorage.getItem(themeKeys.text) || themeDefaults.text;
+const image = localStorage.getItem(themeKeys.image);
 
   const root = document.documentElement;
   root.style.setProperty("--theme-bg", bg);
   root.style.setProperty("--theme-accent", accent);
   root.style.setProperty("--theme-card", card);
-
+root.style.setProperty("--theme-text", text);
   if (image) {
     root.style.setProperty("--theme-bg-image", `url("${image}")`);
   } else {
@@ -1163,14 +1166,15 @@ function applyTheme() {
   }
 
   const bgPicker = $("themeBg");
-  const accentPicker = $("themeAccent");
-  const cardPicker = $("themeCard");
+const accentPicker = $("themeAccent");
+const cardPicker = $("themeCard");
+const textPicker = $("themeText");
 
   if (bgPicker) bgPicker.value = bg;
   if (accentPicker) accentPicker.value = accent;
   if (cardPicker) cardPicker.value = card;
 }
-
+if (textPicker) textPicker.value = text;
 function saveThemeColor(inputId, storageKey) {
   const input = $(inputId);
   if (!input) return;
@@ -1184,6 +1188,7 @@ function saveThemeColor(inputId, storageKey) {
 saveThemeColor("themeBg", themeKeys.bg);
 saveThemeColor("themeAccent", themeKeys.accent);
 saveThemeColor("themeCard", themeKeys.card);
+saveThemeColor("themeText", themeKeys.text);
 
 $("themeImage")?.addEventListener("change", (event) => {
   const file = event.target.files?.[0];

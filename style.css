@@ -38,9 +38,10 @@ body {
     --theme-bg-image,
     linear-gradient(180deg, #fff0f7 0, #fff9fc 340px, #fff7fb 100%)
   );
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+  background-size: 100% auto;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
 }
 .app .panel,
 .app .stat,
@@ -96,4 +97,12 @@ body .app .eyebrow,
 body .app footer,
 body .app .empty {
   color: var(--theme-text, #4a3540);
+}
+
+/* Fix Giveaway Tracker background image */
+body {
+  background-size: 100% auto !important;
+  background-position: center top !important;
+  background-repeat: no-repeat !important;
+  background-attachment: scroll !important;
 }

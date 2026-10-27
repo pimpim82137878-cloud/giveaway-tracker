@@ -636,7 +636,8 @@ function safeUrl(value) {
   }
 }
 
-async function getXImageUrl(postUrl) {
+
+async function getXMedia(postUrl) {
   try {
     const match = postUrl.match(/\/status\/(\d+)/);
     if (!match) return null;
@@ -653,26 +654,35 @@ async function getXImageUrl(postUrl) {
       ? data.media_extended
       : [];
 
+    const video = media.find(item =>
+      item.type === "video" &&
+      typeof item.url === "string" &&
+      item.url.startsWith("https://")
+    );
+
     const image = media.find(item =>
       item.type === "image" &&
       typeof item.url === "string" &&
       item.url.startsWith("https://")
     );
 
-    if (image) return image.url;
+    const thumbnail =
+      video?.thumbnail_url ||
+      video?.thumbnail ||
+      image?.url ||
+      (Array.isArray(data.mediaURLs)
+        ? data.mediaURLs.find(url =>
+            typeof url === "string" &&
+            url.startsWith("https://pbs.twimg.com/media/")
+          )
+        : null);
 
-    if (Array.isArray(data.mediaURLs)) {
-      const fallback = data.mediaURLs.find(url =>
-        typeof url === "string" &&
-        url.startsWith("https://pbs.twimg.com/media/")
-      );
-
-      if (fallback) return fallback;
-    }
-
-    return null;
+    return {
+      imageUrl: thumbnail || null,
+      videoUrl: video?.url || null
+    };
   } catch (error) {
-    console.error("Unable to retrieve X image:", error);
+    console.error("Unable to retrieve X media:", error);
     return null;
   }
 }
@@ -1008,27 +1018,69 @@ if (rows.length === 0) {
     layout.style.gap = "12px";
     layout.style.width = "100%";
 
+    
+if (item.image_url || item.video_url) {
+  const imageBox = document.createElement("div");
+  imageBox.style.flex = "0 0 105px";
+  imageBox.style.width = "105px";
+  imageBox.style.maxWidth = "35%";
+  imageBox.style.overflow = "hidden";
+  imageBox.style.borderRadius = "10px";
+
+  if (item.video_url) {
+    const video = document.createElement("video");
+    video.src = item.video_url;
+    video.autoplay = true;
+    video.loop = true;
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = "metadata";
+    video.setAttribute("aria-label", item.title || tr("prizeImage"));
+
     if (item.image_url) {
-      const imageBox = document.createElement("div");
-      imageBox.style.flex = "0 0 105px";
-      imageBox.style.width = "105px";
-      imageBox.style.maxWidth = "35%";
-
-      const image = document.createElement("img");
-      image.src = item.image_url;
-      image.alt = item.title || tr("prizeImage");
-      image.loading = "lazy";
-      image.style.display = "block";
-      image.style.width = "100%";
-      image.style.height = "125px";
-      image.style.objectFit = "contain";
-      image.style.borderRadius = "10px";
-
-      image.addEventListener("error", () => imageBox.remove());
-
-      imageBox.append(image);
-      layout.append(imageBox);
+      video.poster = item.image_url;
     }
+
+    video.style.display = "block";
+    video.style.width = "100%";
+    video.style.height = "125px";
+    video.style.objectFit = "contain";
+    video.style.borderRadius = "10px";
+
+    video.addEventListener("error", () => {
+      if (item.image_url) {
+        const fallbackImage = document.createElement("img");
+        fallbackImage.src = item.image_url;
+        fallbackImage.alt = item.title || tr("prizeImage");
+        fallbackImage.style.width = "100%";
+        fallbackImage.style.height = "125px";
+        fallbackImage.style.objectFit = "contain";
+        imageBox.replaceChildren(fallbackImage);
+      } else {
+        imageBox.remove();
+      }
+    });
+
+    imageBox.append(video);
+  } else {
+    const image = document.createElement("img");
+    image.src = item.image_url;
+    image.alt = item.title || tr("prizeImage");
+    image.loading = "lazy";
+    image.style.display = "block";
+    image.style.width = "100%";
+    image.style.height = "125px";
+    image.style.objectFit = "contain";
+    image.style.borderRadius = "10px";
+
+    image.addEventListener("error", () => imageBox.remove());
+
+    imageBox.append(image);
+  }
+
+  layout.append(imageBox);
+}
+
 
     const details = document.createElement("div");
     details.style.flex = "1";
@@ -1197,16 +1249,20 @@ $("addForm")?.addEventListener("submit", async event => {
 
   msg(tr("searching"));
 
-  const imageUrl = await getXImageUrl(postUrl);
 
-  const { error } = await db.from("giveaway_items").insert({
-    owner_id: currentUser.id,
-    title: title || tr("defaultTitle"),
-    post_url: postUrl,
-    note,
-    image_url: imageUrl,
-    is_done: false
-  });
+const media = await getXMedia(postUrl);
+const imageUrl = media?.imageUrl || null;
+const videoUrl = media?.videoUrl || null;
+
+const { error } = await db.from("giveaway_items").insert({
+  owner_id: currentUser.id,
+  title: title || tr("defaultTitle"),
+  post_url: postUrl,
+  note,
+  image_url: imageUrl,
+  video_url: videoUrl,
+  is_done: false
+});
 
   if (error) {
     alert(tr("addItemError") + error.message);

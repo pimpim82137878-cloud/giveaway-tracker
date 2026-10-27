@@ -765,8 +765,19 @@ if (languageSelect) {
 }
 
 
+
 if (configured && window.supabase) {
-  db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY,
+    {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    }
+  );
 } else {
   $("setupNotice")?.classList.remove("hidden");
 }
@@ -817,22 +828,37 @@ function showTracker(name) {
   applyLanguage();
 }
 
+
+async function init() {
+  if (!db) return;
+
+
 async function init() {
   if (!db) return;
 
   try {
     const { data, error } = await db.auth.getSession();
+
     if (error) throw error;
 
     const session = data?.session;
 
-    if (session) {
-      currentUser = session.user;
-      const savedName = localStorage.getItem("giveaway_nickname") || "เพื่อน";
-      showTracker(savedName);
-      await loadItems();
+    if (!session?.user) {
+      currentUser = null;
+      return;
     }
+
+    currentUser = session.user;
+    console.log("Current user ID:", session.user.id);
+
+    const savedName =
+      localStorage.getItem("giveaway_nickname") || "เพื่อน";
+
+    showTracker(savedName);
+    await loadItems();
+
   } catch (error) {
+    console.error("Session restore error:", error);
     msg(tr("connectError") + error.message);
   }
 }

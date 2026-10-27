@@ -669,10 +669,10 @@ async function getXMedia(postUrl) {
     );
 
     const image = media.find(item =>
-      item.type === "image" &&
-      typeof item.url === "string" &&
-      item.url.startsWith("https://")
-    );
+  String(item.type || "").toLowerCase() === "image" &&
+  typeof (item.url || item.thumbnail_url) === "string" &&
+  (item.url || item.thumbnail_url).startsWith("https://")
+);
 
     const mediaURLs = Array.isArray(data.mediaURLs)
       ? data.mediaURLs
@@ -688,19 +688,21 @@ async function getXMedia(postUrl) {
       /^https:\/\/pbs\.twimg\.com\/media\//i.test(url)
     );
 
-    return {
-      imageUrl:
-        video?.thumbnail_url ||
-        video?.thumbnail ||
-        image?.url ||
-        fallbackImage ||
-        null,
+    
+return {
+  imageUrl:
+    video?.thumbnail_url ||
+    video?.thumbnail ||
+    image?.url ||
+    image?.thumbnail_url ||
+    fallbackImage ||
+    null,
 
-      videoUrl:
-        video?.url ||
-        fallbackVideo ||
-        null
-    };
+  videoUrl:
+    video?.url ||
+    fallbackVideo ||
+    null
+  };
   } catch (error) {
     console.error("Unable to retrieve X media:", error);
     return null;

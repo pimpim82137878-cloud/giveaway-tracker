@@ -637,25 +637,33 @@ function safeUrl(value) {
 }
 
 
+
 async function getXMedia(postUrl) {
   try {
     const match = postUrl.match(/\/status\/(\d+)/);
     if (!match) return null;
 
     const postId = match[1];
+
     const response = await fetch(
       `https://api.vxtwitter.com/Twitter/status/${postId}`
     );
 
-    if (!response.ok) return null;
+    if (!response.ok) {
+      console.error("VXTwitter API error:", response.status);
+      return null;
+    }
 
     const data = await response.json();
+
     const media = Array.isArray(data.media_extended)
       ? data.media_extended
       : [];
 
     const video = media.find(item =>
-      item.type === "video" &&
+      ["video", "gif"].includes(
+        String(item.type || "").toLowerCase()
+      ) &&
       typeof item.url === "string" &&
       item.url.startsWith("https://")
     );
@@ -666,26 +674,39 @@ async function getXMedia(postUrl) {
       item.url.startsWith("https://")
     );
 
-    const thumbnail =
-      video?.thumbnail_url ||
-      video?.thumbnail ||
-      image?.url ||
-      (Array.isArray(data.mediaURLs)
-        ? data.mediaURLs.find(url =>
-            typeof url === "string" &&
-            url.startsWith("https://pbs.twimg.com/media/")
-          )
-        : null);
+    const mediaURLs = Array.isArray(data.mediaURLs)
+      ? data.mediaURLs
+      : [];
+
+    const fallbackVideo = mediaURLs.find(url =>
+      typeof url === "string" &&
+      /^https:\/\/video\.twimg\.com\/.*\.mp4(?:\?.*)?$/i.test(url)
+    );
+
+    const fallbackImage = mediaURLs.find(url =>
+      typeof url === "string" &&
+      /^https:\/\/pbs\.twimg\.com\/media\//i.test(url)
+    );
 
     return {
-      imageUrl: thumbnail || null,
-      videoUrl: video?.url || null
+      imageUrl:
+        video?.thumbnail_url ||
+        video?.thumbnail ||
+        image?.url ||
+        fallbackImage ||
+        null,
+
+      videoUrl:
+        video?.url ||
+        fallbackVideo ||
+        null
     };
   } catch (error) {
     console.error("Unable to retrieve X media:", error);
     return null;
   }
 }
+
 
 function applyLanguage() {
   document.documentElement.lang = currentLanguage;

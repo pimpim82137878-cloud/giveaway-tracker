@@ -829,12 +829,12 @@ function showTracker(name) {
 }
 
 
-async function init() {
-  if (!db) return;
-
 
 async function init() {
-  if (!db) return;
+  if (!db) {
+    $("setupNotice")?.classList.remove("hidden");
+    return;
+  }
 
   try {
     const { data, error } = await db.auth.getSession();
@@ -845,11 +845,13 @@ async function init() {
 
     if (!session?.user) {
       currentUser = null;
+      $("tracker")?.classList.add("hidden");
+      $("loginPanel")?.classList.remove("hidden");
       return;
     }
 
     currentUser = session.user;
-    console.log("Current user ID:", session.user.id);
+    console.log("Current user ID:", currentUser.id);
 
     const savedName =
       localStorage.getItem("giveaway_nickname") || "เพื่อน";

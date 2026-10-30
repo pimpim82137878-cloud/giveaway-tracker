@@ -1092,23 +1092,51 @@ if (rows.length === 0) {
     layout.style.width = "100%";
 
     
+
 if (item.image_url || item.video_url) {
   const imageBox = document.createElement("div");
+
   imageBox.style.flex = "0 0 105px";
   imageBox.style.width = "105px";
   imageBox.style.maxWidth = "35%";
+  imageBox.style.minHeight = "100px";
   imageBox.style.overflow = "hidden";
   imageBox.style.borderRadius = "10px";
+  imageBox.style.background = "#fff0f6";
+
+  const showImage = (src) => {
+    if (!src) return;
+
+    const image = document.createElement("img");
+    image.src = src;
+    image.alt = item.title || tr("prizeImage");
+    image.loading = "lazy";
+    image.style.display = "block";
+    image.style.width = "100%";
+    image.style.height = "125px";
+    image.style.objectFit = "contain";
+
+    image.addEventListener("error", () => {
+      imageBox.textContent = "ไม่สามารถโหลดรูปภาพได้";
+      imageBox.style.fontSize = "11px";
+      imageBox.style.color = "#b83f78";
+      imageBox.style.display = "grid";
+      imageBox.style.placeItems = "center";
+      imageBox.style.padding = "8px";
+    }, { once: true });
+
+    imageBox.replaceChildren(image);
+  };
 
   if (item.video_url) {
     const video = document.createElement("video");
+
     video.src = item.video_url;
     video.autoplay = true;
     video.loop = true;
     video.muted = true;
     video.playsInline = true;
     video.preload = "metadata";
-    video.setAttribute("aria-label", item.title || tr("prizeImage"));
 
     if (item.image_url) {
       video.poster = item.image_url;
@@ -1118,41 +1146,24 @@ if (item.image_url || item.video_url) {
     video.style.width = "100%";
     video.style.height = "125px";
     video.style.objectFit = "contain";
-    video.style.borderRadius = "10px";
 
     video.addEventListener("error", () => {
       if (item.image_url) {
-        const fallbackImage = document.createElement("img");
-        fallbackImage.src = item.image_url;
-        fallbackImage.alt = item.title || tr("prizeImage");
-        fallbackImage.style.width = "100%";
-        fallbackImage.style.height = "125px";
-        fallbackImage.style.objectFit = "contain";
-        imageBox.replaceChildren(fallbackImage);
+        showImage(item.image_url);
       } else {
         imageBox.remove();
       }
-    });
+    }, { once: true });
 
     imageBox.append(video);
+
   } else {
-    const image = document.createElement("img");
-    image.src = item.image_url;
-    image.alt = item.title || tr("prizeImage");
-    image.loading = "lazy";
-    image.style.display = "block";
-    image.style.width = "100%";
-    image.style.height = "125px";
-    image.style.objectFit = "contain";
-    image.style.borderRadius = "10px";
-
-    image.addEventListener("error", () => imageBox.remove());
-
-    imageBox.append(image);
+    showImage(item.image_url);
   }
 
   layout.append(imageBox);
 }
+
 
 
     const details = document.createElement("div");

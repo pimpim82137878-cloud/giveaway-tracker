@@ -638,20 +638,56 @@ function safeUrl(value) {
 
 
 
+
 async function getXMedia(postUrl) {
+  const emptyMedia = {
+    imageUrl: "",
+    videoUrl: ""
+  };
+
   try {
-    const match = postUrl.match(/\/status\/(\d+)/);
-    if (!match) return null;
+    // ตรวจสอบลิงก์ X และดึงรหัสโพสต์
+    const url = new URL(postUrl);
+    const allowedHosts = [
+      "x.com",
+      "www.x.com",
+      "twitter.com",
+      "www.twitter.com"
+    ];
+
+    if (!allowedHosts.includes(url.hostname)) {
+      return emptyMedia;
+    }
+
+    const match = url.pathname.match(/\/status\/(\d+)/);
+
+    if (!match) {
+      return emptyMedia;
+    }
 
     const postId = match[1];
 
-    const response = await fetch(
-      `https://api.vxtwitter.com/Twitter/status/${postId}`
-    );
+    // เรียกข้อมูลจาก VXTwitter
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 12000);
+
+    let response;
+
+    try {
+      response = await fetch(
+        `https://api.vxtwitter.com/Twitter/status/${postId}`,
+        {
+          method: "GET",
+          signal: controller.signal,
+          cache: "no-store"
+        }
+      );
+    } finally {
+      clearTimeout(timeout);
+    }
 
     if (!response.ok) {
-      console.error("VXTwitter API error:", response.status);
-      return null;
+      return emptyMedia;
     }
 
     const data = await response.json();
@@ -660,55 +696,69 @@ async function getXMedia(postUrl) {
       ? data.media_extended
       : [];
 
-    const video = media.find(item =>
-      ["video", "gif"].includes(
-        String(item.type || "").toLowerCase()
-      ) &&
-      typeof item.url === "string" &&
-      item.url.startsWith("https://")
-    );
+    let imageUrl = "";
+    let videoUrl = "";
 
-    const image = media.find(item =>
-  String(item.type || "").toLowerCase() === "image" &&
-  typeof (item.url || item.thumbnail_url) === "string" &&
-  (item.url || item.thumbnail_url).startsWith("https://")
-);
+    // อ่านข้อมูลภาพและวิดีโอจาก media_extended
+    for (const item of media) {
+      const type = String(item.type || "").toLowerCase();
 
-    const mediaURLs = Array.isArray(data.mediaURLs)
-      ? data.mediaURLs
-      : [];
+      const fileUrl = item.url || "";
+      const thumbnailUrl = item.thumbnail_url || "";
 
-    const fallbackVideo = mediaURLs.find(url =>
-      typeof url === "string" &&
-      /^https:\/\/video\.twimg\.com\/.*\.mp4(?:\?.*)?$/i.test(url)
-    );
+      if (type === "image" && !imageUrl) {
+        imageUrl = fileUrl || thumbnailUrl;
+      }
 
-    const fallbackImage = mediaURLs.find(url =>
-      typeof url === "string" &&
-      /^https:\/\/pbs\.twimg\.com\/media\//i.test(url)
-    );
+      if (type === "video" || type === "gif") {
+        if (!videoUrl && fileUrl) {
+          videoUrl = fileUrl;
+        }
 
-    
-return {
-  imageUrl:
-    video?.thumbnail_url ||
-    video?.thumbnail ||
-    image?.url ||
-    image?.thumbnail_url ||
-    fallbackImage ||
-    null,
+        if (!imageUrl && thumbnailUrl) {
+          imageUrl = thumbnailUrl;
+        }
+      }
+    }
 
-  videoUrl:
-    video?.url ||
-    fallbackVideo ||
-    null
-  };
+    // สำรองด้วย mediaURLs กรณีไม่มี media_extended
+    if (!imageUrl || !videoUrl) {
+      const urls = Array.isArray(data.mediaURLs)
+        ? data.mediaURLs
+        : [];
+
+      for (const mediaUrl of urls) {
+        if (!mediaUrl) continue;
+
+        const cleanUrl = String(mediaUrl);
+
+        if (
+          /\.(mp4|m3u8)(\?|$)/i.test(cleanUrl) ||
+          cleanUrl.includes("video.twimg.com")
+        ) {
+          if (!videoUrl && /\.mp4(\?|$)/i.test(cleanUrl)) {
+            videoUrl = cleanUrl;
+          }
+        } else if (
+          cleanUrl.includes("pbs.twimg.com") &&
+          !imageUrl
+        ) {
+          imageUrl = cleanUrl;
+        }
+      }
+    }
+
+    return {
+      imageUrl,
+      videoUrl
+    };
+
   } catch (error) {
-    console.error("Unable to retrieve X media:", error);
-    return null;
+    console.warn("ดึงรูปจาก X ไม่สำเร็จ:", error);
+
+    return emptyMedia;
   }
 }
-
 
 function applyLanguage() {
   document.documentElement.lang = currentLanguage;
